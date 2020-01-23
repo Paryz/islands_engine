@@ -15,7 +15,7 @@ defmodule IslandsEngine.Island do
     end
   end
 
-  def overlap?(%__MODULE__{} = old_island, %__MODULE__{} = new_island) do
+  def overlaps?(%__MODULE__{} = old_island, %__MODULE__{} = new_island) do
     not MapSet.disjoint?(old_island.coordinates, new_island.coordinates)
   end
 
