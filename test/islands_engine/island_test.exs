@@ -54,13 +54,11 @@ defmodule IslandsEngine.IslandTest do
     {:ok, coordinate} = Coordinate.new(1, 1)
     mapset = MapSet.new() |> MapSet.put(coordinate)
 
-    {:ok,
-     %Island{
-       coordinates: %MapSet{} = coordinates,
-       hit_coordinates: %MapSet{}
-     }} = Island.new(:dot, coordinate)
-
-    assert coordinates == mapset
+    assert {:ok,
+            %Island{
+              coordinates: ^mapset,
+              hit_coordinates: %MapSet{}
+            }} = Island.new(:dot, coordinate)
   end
 
   test "creates a square island" do
@@ -76,13 +74,11 @@ defmodule IslandsEngine.IslandTest do
       |> MapSet.put(coordinate_3)
       |> MapSet.put(coordinate_4)
 
-    {:ok,
-     %Island{
-       coordinates: %MapSet{} = coordinates,
-       hit_coordinates: %MapSet{}
-     }} = Island.new(:square, coordinate_1)
-
-    assert coordinates == mapset
+    assert {:ok,
+            %Island{
+              coordinates: ^mapset,
+              hit_coordinates: %MapSet{}
+            }} = Island.new(:square, coordinate_1)
   end
 
   test "creates a atoll island" do
@@ -100,13 +96,11 @@ defmodule IslandsEngine.IslandTest do
       |> MapSet.put(coordinate_4)
       |> MapSet.put(coordinate_5)
 
-    {:ok,
-     %Island{
-       coordinates: %MapSet{} = coordinates,
-       hit_coordinates: %MapSet{}
-     }} = Island.new(:atoll, coordinate_1)
-
-    assert coordinates == mapset
+    assert {:ok,
+            %Island{
+              coordinates: ^mapset,
+              hit_coordinates: %MapSet{}
+            }} = Island.new(:atoll, coordinate_1)
   end
 
   test "creates a l shaped island" do
@@ -122,13 +116,11 @@ defmodule IslandsEngine.IslandTest do
       |> MapSet.put(coordinate_3)
       |> MapSet.put(coordinate_4)
 
-    {:ok,
-     %Island{
-       coordinates: %MapSet{} = coordinates,
-       hit_coordinates: %MapSet{}
-     }} = Island.new(:l_shape, coordinate_1)
-
-    assert coordinates == mapset
+    assert {:ok,
+            %Island{
+              coordinates: ^mapset,
+              hit_coordinates: %MapSet{}
+            }} = Island.new(:l_shape, coordinate_1)
   end
 
   test "creates a s shaped island" do
@@ -145,13 +137,11 @@ defmodule IslandsEngine.IslandTest do
       |> MapSet.put(coordinate_3)
       |> MapSet.put(coordinate_4)
 
-    {:ok,
-     %Island{
-       coordinates: %MapSet{} = coordinates,
-       hit_coordinates: %MapSet{}
-     }} = Island.new(:s_shape, upper_left)
-
-    assert coordinates == mapset
+    assert {:ok,
+            %Island{
+              coordinates: ^mapset,
+              hit_coordinates: %MapSet{}
+            }} = Island.new(:s_shape, upper_left)
   end
 
   test "islands are not overlapping" do
@@ -186,10 +176,8 @@ defmodule IslandsEngine.IslandTest do
     {:ok, island} = Island.new(:dot, coordinate_1)
     mapset = MapSet.put(island.hit_coordinates, coordinate_1)
 
-    {:hit, %Island{hit_coordinates: hit_coordinates, coordinates: %MapSet{}}} =
-      Island.guess(island, coordinate_1)
-
-    assert mapset == hit_coordinates
+    assert {:hit, %Island{hit_coordinates: ^mapset, coordinates: %MapSet{}}} =
+             Island.guess(island, coordinate_1)
   end
 
   test "island is not forested" do
