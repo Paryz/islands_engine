@@ -213,4 +213,8 @@ defmodule IslandsEngine.IslandTest do
 
     assert Island.forested?(island) == true
   end
+
+  test "check all island types" do
+    assert Island.types() == [:atoll, :dot, :l_shape, :s_shape, :square]
+  end
 end
