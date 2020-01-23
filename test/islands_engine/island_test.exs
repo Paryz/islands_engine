@@ -153,4 +153,42 @@ defmodule IslandsEngine.IslandTest do
 
     assert coordinates == mapset
   end
+
+  test "islands are not overlapping" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(2, 2)
+
+    {:ok, dot_island} = Island.new(:dot, coordinate_1)
+    {:ok, square_island} = Island.new(:square, coordinate_2)
+
+    assert Island.overlap?(dot_island, square_island) == false
+  end
+
+  test "islands are overlapping" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+
+    {:ok, dot_island} = Island.new(:dot, coordinate_1)
+    {:ok, square_island} = Island.new(:square, coordinate_1)
+
+    assert Island.overlap?(dot_island, square_island) == true
+  end
+
+  test "guess is missed" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(1, 2)
+    {:ok, island} = Island.new(:dot, coordinate_1)
+
+    assert Island.guess(island, coordinate_2) == :miss
+  end
+
+  test "guess is hit" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, island} = Island.new(:dot, coordinate_1)
+    mapset = MapSet.put(island.hit_coordinates, coordinate_1)
+
+    {:hit, %Island{hit_coordinates: hit_coordinates, coordinates: %MapSet{}}} =
+      Island.guess(island, coordinate_1)
+
+    assert mapset == hit_coordinates
+  end
 end

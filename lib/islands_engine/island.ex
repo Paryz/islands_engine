@@ -13,6 +13,21 @@ defmodule IslandsEngine.Island do
     end
   end
 
+  def overlap?(%__MODULE__{} = old_island, %__MODULE__{} = new_island) do
+    not MapSet.disjoint?(old_island.coordinates, new_island.coordinates)
+  end
+
+  def guess(%__MODULE__{} = island, %Coordinate{} = coordinate) do
+    case MapSet.member?(island.coordinates, coordinate) do
+      true ->
+        hit_coordinates = MapSet.put(island.hit_coordinates, coordinate)
+        {:hit, %{island | hit_coordinates: hit_coordinates}}
+
+      false ->
+        :miss
+    end
+  end
+
   defp offsets(:square), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
   defp offsets(:atoll), do: [{0, 0}, {0, 1}, {1, 1}, {2, 0}, {2, 1}]
   defp offsets(:dot), do: [{0, 0}]
