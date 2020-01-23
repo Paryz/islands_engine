@@ -191,4 +191,26 @@ defmodule IslandsEngine.IslandTest do
 
     assert mapset == hit_coordinates
   end
+
+  test "island is not forested" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, island} = Island.new(:square, coordinate_1)
+    {:hit, island} = Island.guess(island, coordinate_1)
+
+    assert Island.forested?(island) == false
+  end
+
+  test "island is forested" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(1, 2)
+    {:ok, coordinate_3} = Coordinate.new(2, 1)
+    {:ok, coordinate_4} = Coordinate.new(2, 2)
+    {:ok, island} = Island.new(:square, coordinate_1)
+    {:hit, island} = Island.guess(island, coordinate_1)
+    {:hit, island} = Island.guess(island, coordinate_2)
+    {:hit, island} = Island.guess(island, coordinate_3)
+    {:hit, island} = Island.guess(island, coordinate_4)
+
+    assert Island.forested?(island) == true
+  end
 end
