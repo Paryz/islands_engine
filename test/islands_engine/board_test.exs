@@ -122,4 +122,58 @@ defmodule IslandsEngine.BoardTest do
 
     assert {:miss, :none, :no_win, ^board} = Board.guess(board, coordinate_2)
   end
+
+  test "hit without win and without forest" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(1, 2)
+
+    {:ok, square_island} = Island.new(:square, coordinate_1)
+
+    board =
+      Board.new()
+      |> Board.position_island(:square, square_island)
+
+    assert {:hit, :none, :no_win, %{}} = Board.guess(board, coordinate_2)
+  end
+
+  test "hit without win and with forest" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(1, 2)
+    {:ok, coordinate_3} = Coordinate.new(2, 1)
+    {:ok, coordinate_4} = Coordinate.new(2, 2)
+    {:ok, coordinate_5} = Coordinate.new(5, 2)
+
+    {:ok, square_island} = Island.new(:square, coordinate_1)
+    {:ok, dot_island} = Island.new(:dot, coordinate_5)
+
+    board =
+      Board.new()
+      |> Board.position_island(:square, square_island)
+      |> Board.position_island(:dot, dot_island)
+
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_1)
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_2)
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_3)
+
+    assert {:hit, :square, :no_win, %{}} = Board.guess(board, coordinate_4)
+  end
+
+  test "hit with win and with forest" do
+    {:ok, coordinate_1} = Coordinate.new(1, 1)
+    {:ok, coordinate_2} = Coordinate.new(1, 2)
+    {:ok, coordinate_3} = Coordinate.new(2, 1)
+    {:ok, coordinate_4} = Coordinate.new(2, 2)
+
+    {:ok, square_island} = Island.new(:square, coordinate_1)
+
+    board =
+      Board.new()
+      |> Board.position_island(:square, square_island)
+
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_1)
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_2)
+    {:hit, :none, :no_win, board} = Board.guess(board, coordinate_3)
+
+    assert {:hit, :square, :win, %{}} = Board.guess(board, coordinate_4)
+  end
 end
